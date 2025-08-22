@@ -10,8 +10,7 @@ import os
 # CONFIG
 # -----------------------------
 MODEL_PATH = "cat_dog_classifier1.keras"
-# Direct download URL for Google Drive file
-FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
+FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"  # Your real file ID
 URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
 # -----------------------------
@@ -30,7 +29,7 @@ def load_model():
         model = keras.models.load_model(MODEL_PATH, compile=False)
         return model
     except Exception as e:
-        st.error(f"❌ Failed to load model. Make sure the file is a valid .keras or .h5 model: {e}")
+        st.error(f"❌ Failed to load model. Make sure the file is a valid .keras model. Error: {e}")
         return None
 
 model = load_model()
@@ -39,7 +38,7 @@ model = load_model()
 # PREPROCESS IMAGE
 # -----------------------------
 def preprocess_image(image):
-    img = image.resize((224, 224))  # Match your model input size
+    img = image.resize((224, 224))  # Match your training size
     img_array = keras.utils.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255.0   # normalize
@@ -66,5 +65,3 @@ if uploaded_file is not None and model:
             st.success("🐶 This looks like a **Dog**!")
         else:
             st.success("🐱 This looks like a **Cat**!")
-elif not model:
-    st.warning("Model not loaded. Make sure your Drive file is a valid .keras or .h5 file and properly shared.")
