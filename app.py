@@ -3,8 +3,7 @@ import gdown
 import numpy as np
 import streamlit as st
 from PIL import Image
-from tensorflow import keras
-from keras.saving import legacy_serialization   # 👈 important fix
+from tensorflow import keras   # ✅ Only this import (remove legacy_serialization)
 
 # Paths
 MODEL_PATH = "cat_dog_classifier1.h5"
@@ -24,14 +23,14 @@ def download_model():
                 st.stop()
 
 # ---------------------------
-# Load model (patched for legacy format)
+# Load model (safe_mode disabled for legacy .h5)
 # ---------------------------
 @st.cache_resource
 def load_model():
     return keras.models.load_model(
         MODEL_PATH,
         compile=False,
-        safe_mode=False   # 👈 disables strict checks
+        safe_mode=False   # 👈 key fix
     )
 
 # ---------------------------
