@@ -1,75 +1,33 @@
-import streamlit as st
-import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+import numpy as np
+import streamlit as st
 from PIL import Image
-import gdown
-import os
 
-# -----------------------------
-# CONFIG
-# -----------------------------
-MODEL_PATH = "cat_dog_classifier1.keras"  # Use only this model
-FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"  # Your Google Drive File ID
-URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"  # Direct download link
+# Load the saved model
+model = keras.models.load_model("cat_dog_classifier1.keras")
 
-# -----------------------------
-# DELETE OLD/INVALID FILES IF PRESENT
-# -----------------------------
-if os.path.exists("cat_dog_classifier1.h5"):
-    os.remove("cat_dog_classifier1.h5")  # Delete old h5 file
-if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) < 100000:  # <100KB likely broken
-    os.remove(MODEL_PATH)
+# Streamlit UI
+st.title("Cat and Dog Classification")
+st.write("Upload an image to classify it as a cat or dog.")
 
-# -----------------------------
-# DOWNLOAD MODEL IF NOT EXISTS
-# -----------------------------
-if not os.path.exists(MODEL_PATH):
-    with st.spinner("Downloading model... please wait ⏳"):
-        gdown.download(URL, MODEL_PATH, quiet=False)
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
-# -----------------------------
-# LOAD MODEL
-# -----------------------------
-@st.cache_resource
-def load_model():
-    try:
-        model = keras.models.load_model(MODEL_PATH, compile=False)
-        return model
-    except Exception as e:
-        st.error(f"❌ Failed to load model. Make sure the file is a valid .keras model. Error: {e}")
-        return None
+if uploaded_file is not None:
+    # Load and display the image
+    img = Image.open(uploaded_file)
+    st.image(img, caption="Uploaded Image", use_column_width=True)
 
-model = load_model()
+    # Preprocess the image
+    img = img.resize((150, 150))           # Resize to match model input
+    img_array = np.array(img) / 255.0      # Normalize pixel values
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
 
-# -----------------------------
-# IMAGE PREPROCESSING
-# -----------------------------
-def preprocess_image(image):
-    img = image.resize((224, 224))  # match training input size
-    img_array = keras.utils.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array / 255.0  # normalize
-    return img_array
+    # Make a prediction
+    prediction = model.predict(img_array)
 
-# -----------------------------
-# STREAMLIT APP
-# -----------------------------
-st.title("🐱🐶 Cat and Dog Classifier")
-st.write("Upload an image to classify it as a cat or a dog.")
-
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
-if uploaded_file is not None and model:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
-
-    if st.button("Classify"):
-        img_array = preprocess_image(image)
-        prediction = model.predict(img_array)
-
-        # Binary classifier (Cat=0, Dog=1)
-        if prediction[0][0] > 0.5:
-            st.success("🐶 This looks like a **Dog**!")
-        else:
-            st.success("🐱 This looks like a **Cat**!")
+    # Display the result
+    if prediction[0][0] > 0.5:  # prediction[0][0] because model.predict returns [[prob]]
+        st.write("Prediction: 🐶 Dog")
+    else:
+        st.write("Prediction: 🐈 Cat")
