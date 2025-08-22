@@ -22,8 +22,10 @@ def download_model():
                 st.stop()
 
 @st.cache_resource  # Cache the model loading so it doesn't reload every interaction
+
 def load_model():
-    return keras.models.load_model(MODEL_PATH)
+    return keras.models.load_model(MODEL_PATH, compile=False)
+    
 
 def preprocess_image(image):
     image = image.resize((150, 150))  # Resize to model input size
