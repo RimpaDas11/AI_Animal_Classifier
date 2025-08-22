@@ -9,18 +9,18 @@ import os
 # Model Setup
 # ==============================
 MODEL_PATH = "cat_dog_classifier1.keras"
-# Google Drive direct download link
+# Direct download link from Google Drive
 DRIVE_URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
 
-@st.cache_resource  # caches the loaded model in Streamlit
+@st.cache_resource  # caches the loaded model for faster reloads
 def load_model():
-    # Download model if it doesn't exist
+    # Step 1: Download model if it doesn't exist
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading model..."):
             gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
-        st.success("Model downloaded successfully!")
+            st.success("Model downloaded successfully!")
     
-    # Load the model
+    # Step 2: Load the model safely
     try:
         model = tf.keras.models.load_model(MODEL_PATH, compile=False)
         return model
@@ -44,8 +44,10 @@ def main():
     st.title("🐱🐶 Cat and Dog Classifier")
     st.write("Upload an image to classify it as a cat or a dog.")
 
+    # Load model
     model = load_model()
 
+    # File uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert("RGB")
