@@ -9,19 +9,25 @@ import os
 # Model Setup
 # ==============================
 MODEL_PATH = "cat_dog_classifier1.keras"
+# Use the direct download link from Google Drive
 DRIVE_URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
 
-@st.cache_resource  # caches the loaded model
+@st.cache_resource
 def load_model():
     # Download model if not exists
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading model..."):
             r = requests.get(DRIVE_URL)
-            with open(MODEL_PATH, "wb") as f:
-                f.write(r.content)
-        st.success("Model downloaded successfully!")
-    
-    # Load the model safely
+            # Ensure the request succeeded
+            if r.status_code == 200:
+                with open(MODEL_PATH, "wb") as f:
+                    f.write(r.content)
+                st.success("Model downloaded successfully!")
+            else:
+                st.error(f"Failed to download model: status code {r.status_code}")
+                st.stop()
+
+    # Load the model
     try:
         return tf.keras.models.load_model(MODEL_PATH, compile=False)
     except Exception as e:
