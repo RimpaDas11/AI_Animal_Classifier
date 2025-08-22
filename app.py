@@ -1,45 +1,47 @@
-import os
-import gdown
-import tensorflow as tf
-import numpy as np
 import streamlit as st
+import tensorflow as tf
+import keras
+import numpy as np
 from PIL import Image
+import requests, os
 
-MODEL_PATH = "cat_dog_classifier1.h5"
-DRIVE_URL = "https://drive.google.com/uc?id=1Vn5zGrlIKIC7E9PB2OWsk9HphXh8tFa4"
-
-def download_model():
-    if not os.path.exists(MODEL_PATH):
-        with st.spinner("Model not found locally. Downloading..."):
-            try:
-                gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
-                st.success("Model downloaded successfully!")
-            except Exception as e:
-                st.error(f"Failed to download model: {e}")
-                st.stop()
+# ==============================
+# Model Setup
+# ==============================
+MODEL_PATH = "cat_dog_classifier1.keras"
+DRIVE_URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
 
 @st.cache_resource
 def load_model():
-    # Try TensorFlow’s loader first
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model..."):
+            r = requests.get(DRIVE_URL)
+            with open(MODEL_PATH, "wb") as f:
+                f.write(r.content)
+        st.success("Model downloaded successfully!")
+
     try:
         return tf.keras.models.load_model(MODEL_PATH, compile=False)
     except Exception as e:
-        st.warning(f"tf.keras loader failed, retrying with keras: {e}")
-        import keras
-        # Keras 3 fallback with safe_mode=False for legacy .h5
+        st.error(f"TensorFlow loader failed: {e}")
         return keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
 
+# ==============================
+# Preprocessing Function
+# ==============================
 def preprocess_image(image):
-    image = image.resize((150, 150))  # change to (224,224) if your model was trained that way
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)
-    return image
+    img = image.resize((150, 150))  # same size used during training
+    img = np.array(img) / 255.0
+    img = np.expand_dims(img, axis=0)  # shape (1, 150, 150, 3)
+    return img
 
+# ==============================
+# Streamlit App
+# ==============================
 def main():
     st.title("🐱🐶 Cat and Dog Classifier")
     st.write("Upload an image to classify it as a cat or a dog.")
 
-    download_model()
     model = load_model()
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -47,13 +49,14 @@ def main():
         image = Image.open(uploaded_file).convert("RGB")
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
-        img_array = preprocess_image(image)
-        prediction = model.predict(img_array)[0][0]
+        if st.button("Predict"):
+            img_array = preprocess_image(image)
+            prediction = model.predict(img_array)[0][0]
 
-        if prediction > 0.5:
-            st.success("Prediction: 🐶 Dog")
-        else:
-            st.success("Prediction: 🐱 Cat")
+            if prediction > 0.5:
+                st.success("It's a 🐶 Dog!")
+            else:
+                st.success("It's a 🐱 Cat!")
 
 if __name__ == "__main__":
     main()
