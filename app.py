@@ -1,14 +1,11 @@
-
 import os
 import gdown
 import tensorflow as tf
-from tensorflow import keras
 import numpy as np
 import streamlit as st
 from PIL import Image
 
 MODEL_PATH = "cat_dog_classifier1.h5"
-
 DRIVE_URL = "https://drive.google.com/uc?id=1Vn5zGrlIKIC7E9PB2OWsk9HphXh8tFa4"
 
 def download_model():
@@ -21,16 +18,14 @@ def download_model():
                 st.error(f"Failed to download model: {e}")
                 st.stop()
 
-@st.cache_resource  # Cache the model loading so it doesn't reload every interaction
-
+@st.cache_resource
 def load_model():
-    return keras.models.load_model(MODEL_PATH, compile=False)
-    
+    return tf.keras.models.load_model(MODEL_PATH, compile=False)
 
 def preprocess_image(image):
-    image = image.resize((150, 150))  # Resize to model input size
-    image = np.array(image) / 255.0   # Normalize pixel values
-    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    image = image.resize((150, 150))  
+    image = np.array(image) / 255.0
+    image = np.expand_dims(image, axis=0)
     return image
 
 def main():
@@ -42,7 +37,7 @@ def main():
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
-        image = Image.open(uploaded_file)
+        image = Image.open(uploaded_file).convert("RGB")
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
         img_array = preprocess_image(image)
@@ -55,6 +50,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
