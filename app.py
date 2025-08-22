@@ -9,7 +9,7 @@ import os
 # CONFIG
 # -----------------------------
 MODEL_PATH = "cat_dog_classifier1.keras"
-FILE_ID = "1KIucvTlFOZCDuknnRSXGzx2cDpDp1Nz-"
+FILE_ID = "1KIucvTlFOZCDuknnRSXGzx2cDpDp1Nz-"  # Your new .keras model
 URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
 
 # -----------------------------
@@ -45,7 +45,7 @@ model = load_model()
 # IMAGE PREPROCESSING
 # -----------------------------
 def preprocess_image(image):
-    img = image.resize((224, 224))  # match training input size
+    img = image.resize((150, 150))  # Match your training input size
     img_array = keras.utils.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255.0  # normalize
@@ -59,16 +59,19 @@ st.write("Upload an image to classify it as a cat or a dog.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None and model:
+if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     if st.button("Classify"):
-        img_array = preprocess_image(image)
-        prediction = model.predict(img_array)
+        if model is not None:
+            img_array = preprocess_image(image)
+            prediction = model.predict(img_array)
 
-        # Binary classifier (Cat=0, Dog=1)
-        if prediction[0][0] > 0.5:
-            st.success("🐶 This looks like a **Dog**!")
+            # Binary classifier (Cat=0, Dog=1)
+            if prediction[0][0] > 0.5:
+                st.success("🐶 This looks like a **Dog**!")
+            else:
+                st.success("🐱 This looks like a **Cat**!")
         else:
-            st.success("🐱 This looks like a **Cat**!")
+            st.error("Model not loaded. Please check the .keras file.")
