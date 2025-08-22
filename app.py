@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-from tensorflow import keras
+from keras.src.saving import load_model
 from PIL import Image
 import gdown
 import os
@@ -33,7 +33,8 @@ if not os.path.exists(MODEL_PATH):
 @st.cache_resource
 def load_model():
     try:
-        model = keras.models.load_model(MODEL_PATH, compile=False)
+        
+        model = load_model(MODEL_PATH, compile=False)
         return model
     except Exception as e:
         st.error(f"❌ Failed to load model. Make sure the file is a valid .keras model. Error: {e}")
