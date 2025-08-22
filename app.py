@@ -20,10 +20,17 @@ def download_model():
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model(MODEL_PATH, compile=False)
+    # Try TensorFlow’s loader first
+    try:
+        return tf.keras.models.load_model(MODEL_PATH, compile=False)
+    except Exception as e:
+        st.warning(f"tf.keras loader failed, retrying with keras: {e}")
+        import keras
+        # Keras 3 fallback with safe_mode=False for legacy .h5
+        return keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
 
 def preprocess_image(image):
-    image = image.resize((150, 150))  
+    image = image.resize((150, 150))  # change to (224,224) if your model was trained that way
     image = np.array(image) / 255.0
     image = np.expand_dims(image, axis=0)
     return image
