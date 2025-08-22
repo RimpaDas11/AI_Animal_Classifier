@@ -1,9 +1,9 @@
 import streamlit as st
 import tensorflow as tf
-import keras
 import numpy as np
 from PIL import Image
-import requests, os
+import requests
+import os
 
 # ==============================
 # Model Setup
@@ -11,28 +11,30 @@ import requests, os
 MODEL_PATH = "cat_dog_classifier1.keras"
 DRIVE_URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
 
-@st.cache_resource
+@st.cache_resource  # caches the loaded model
 def load_model():
+    # Download model if not exists
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading model..."):
             r = requests.get(DRIVE_URL)
             with open(MODEL_PATH, "wb") as f:
                 f.write(r.content)
         st.success("Model downloaded successfully!")
-
+    
+    # Load the model safely
     try:
         return tf.keras.models.load_model(MODEL_PATH, compile=False)
     except Exception as e:
-        st.error(f"TensorFlow loader failed: {e}")
-        return keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
+        st.error(f"Failed to load model: {e}")
+        st.stop()
 
 # ==============================
-# Preprocessing Function
+# Image Preprocessing
 # ==============================
 def preprocess_image(image):
-    img = image.resize((150, 150))  # same size used during training
-    img = np.array(img) / 255.0
-    img = np.expand_dims(img, axis=0)  # shape (1, 150, 150, 3)
+    img = image.resize((150, 150))  # resize to model input size
+    img = np.array(img) / 255.0      # normalize
+    img = np.expand_dims(img, axis=0)  # batch dimension
     return img
 
 # ==============================
