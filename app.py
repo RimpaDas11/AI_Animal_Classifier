@@ -9,12 +9,20 @@ import os
 # -----------------------------
 # CONFIG
 # -----------------------------
-MODEL_PATH = "cat_dog_classifier1.keras"
-FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"  # Your real file ID
-URL = f"https://drive.google.com/uc?id={FILE_ID}"
+MODEL_PATH = "cat_dog_classifier1.keras"  # Use only this model
+FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"  # Your Google Drive File ID
+URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"  # Direct download link
 
 # -----------------------------
-# DOWNLOAD MODEL (if not exists)
+# DELETE OLD/INVALID FILES IF PRESENT
+# -----------------------------
+if os.path.exists("cat_dog_classifier1.h5"):
+    os.remove("cat_dog_classifier1.h5")  # Delete old h5 file
+if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) < 100000:  # <100KB likely broken
+    os.remove(MODEL_PATH)
+
+# -----------------------------
+# DOWNLOAD MODEL IF NOT EXISTS
 # -----------------------------
 if not os.path.exists(MODEL_PATH):
     with st.spinner("Downloading model... please wait ⏳"):
@@ -35,13 +43,13 @@ def load_model():
 model = load_model()
 
 # -----------------------------
-# PREPROCESS IMAGE
+# IMAGE PREPROCESSING
 # -----------------------------
 def preprocess_image(image):
-    img = image.resize((224, 224))  # Match your training size
+    img = image.resize((224, 224))  # match training input size
     img_array = keras.utils.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array / 255.0   # normalize
+    img_array = img_array / 255.0  # normalize
     return img_array
 
 # -----------------------------
@@ -60,7 +68,7 @@ if uploaded_file is not None and model:
         img_array = preprocess_image(image)
         prediction = model.predict(img_array)
 
-        # Binary classifier (Cat=0, Dog=1) assumption
+        # Binary classifier (Cat=0, Dog=1)
         if prediction[0][0] > 0.5:
             st.success("🐶 This looks like a **Dog**!")
         else:
