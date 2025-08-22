@@ -1,35 +1,58 @@
+
+import os
+import gdown
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import streamlit as st
 from PIL import Image
 
+MODEL_PATH = "cat_dog_classifier1.h5"
 
-# Load the saved model
-model = keras.models.load_model("cat_dog_classifier1.h5")
+DRIVE_URL = "https://drive.google.com/uc?id=1Vn5zGrlIKIC7E9PB2OWsk9HphXh8tFa4"
 
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Model not found locally. Downloading..."):
+            try:
+                gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
+                st.success("Model downloaded successfully!")
+            except Exception as e:
+                st.error(f"Failed to download model: {e}")
+                st.stop()
 
-# Streamlit UI
-st.title("Cat and Dog Classification")
-st.write("Upload an image to classify it as a cat or dog.")
+@st.cache_resource  # Cache the model loading so it doesn't reload every interaction
+def load_model():
+    return keras.models.load_model(MODEL_PATH)
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
-
-
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
-
-    # Preprocess the image
-    image = image.resize((150, 150))  # Resize to match model input
+def preprocess_image(image):
+    image = image.resize((150, 150))  # Resize to model input size
     image = np.array(image) / 255.0   # Normalize pixel values
-    image = np.expand_dims(image, axis=0)  # Expand dimensions to match model input shape
+    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    return image
 
-    # Make a prediction
-    prediction = model.predict(image)
+def main():
+    st.title("🐱🐶 Cat and Dog Classifier")
+    st.write("Upload an image to classify it as a cat or a dog.")
 
-    # Display the result
-    if prediction[0] > 0.5:
-        st.write("Prediction: 🐶 Dog")
-    else:
-        st.write("Prediction: 🐈 Cat")
+    download_model()
+    model = load_model()
+
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+
+        img_array = preprocess_image(image)
+        prediction = model.predict(img_array)[0][0]
+
+        if prediction > 0.5:
+            st.success("Prediction: 🐶 Dog")
+        else:
+            st.success("Prediction: 🐱 Cat")
+
+if __name__ == "__main__":
+    main()
+
+
+
