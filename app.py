@@ -12,7 +12,8 @@ import os
 MODEL_PATH = "cat_dog_classifier1.keras"
 # Correct direct download URL for Google Drive
 FILE_ID = "1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
-URL = f"https://drive.google.com/uc?id={FILE_ID}"  # direct download link
+URL = URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
+
 
 # -----------------------------
 # DOWNLOAD MODEL (if not exists)
