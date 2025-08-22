@@ -2,34 +2,28 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import requests
+import gdown
 import os
 
 # ==============================
 # Model Setup
 # ==============================
 MODEL_PATH = "cat_dog_classifier1.keras"
-# Use the direct download link from Google Drive
+# Google Drive direct download link
 DRIVE_URL = "https://drive.google.com/uc?id=1kGVQh-vwNCDnOAzcVYEOwQQwMsxrDsyU"
 
-@st.cache_resource
+@st.cache_resource  # caches the loaded model in Streamlit
 def load_model():
-    # Download model if not exists
+    # Download model if it doesn't exist
     if not os.path.exists(MODEL_PATH):
         with st.spinner("Downloading model..."):
-            r = requests.get(DRIVE_URL)
-            # Ensure the request succeeded
-            if r.status_code == 200:
-                with open(MODEL_PATH, "wb") as f:
-                    f.write(r.content)
-                st.success("Model downloaded successfully!")
-            else:
-                st.error(f"Failed to download model: status code {r.status_code}")
-                st.stop()
-
+            gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
+        st.success("Model downloaded successfully!")
+    
     # Load the model
     try:
-        return tf.keras.models.load_model(MODEL_PATH, compile=False)
+        model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+        return model
     except Exception as e:
         st.error(f"Failed to load model: {e}")
         st.stop()
@@ -38,10 +32,10 @@ def load_model():
 # Image Preprocessing
 # ==============================
 def preprocess_image(image):
-    img = image.resize((150, 150))  # resize to model input size
-    img = np.array(img) / 255.0      # normalize
-    img = np.expand_dims(img, axis=0)  # batch dimension
-    return img
+    image = image.resize((150, 150))       # resize to model input size
+    image = np.array(image) / 255.0        # normalize pixel values
+    image = np.expand_dims(image, axis=0)  # add batch dimension
+    return image
 
 # ==============================
 # Streamlit App
