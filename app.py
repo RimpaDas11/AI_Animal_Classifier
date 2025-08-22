@@ -10,8 +10,7 @@ from PIL import Image
 # CONFIG
 # -----------------------------
 MODEL_PATH = "cat_dog_classifier1.h5"
-# ✅ Use direct download link (converted from your Drive share link)
-DRIVE_URL = "https://drive.google.com/uc?id=1Vn5zGrlIKIC7E9PB2OWsk9HphXh8tFa4"
+DRIVE_URL = "https://drive.google.com/uc?id=1IPtus1oq835st3RJmZbhqkujbXJz3Sot"
 
 # -----------------------------
 # DOWNLOAD MODEL IF NEEDED
@@ -29,17 +28,21 @@ def download_model():
 # -----------------------------
 # LOAD MODEL
 # -----------------------------
-@st.cache_resource  # Cache the model to avoid reloading
+@st.cache_resource
 def load_model():
-    return keras.models.load_model(MODEL_PATH)
+    try:
+        return keras.models.load_model(MODEL_PATH, compile=False)
+    except Exception as e:
+        st.error(f"❌ Failed to load model: {e}")
+        st.stop()
 
 # -----------------------------
 # IMAGE PREPROCESSING
 # -----------------------------
 def preprocess_image(image):
-    image = image.resize((150, 150))  # Resize to match training input
-    image = np.array(image) / 255.0   # Normalize pixel values
-    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    image = image.resize((150, 150))
+    image = np.array(image) / 255.0
+    image = np.expand_dims(image, axis=0)
     return image
 
 # -----------------------------
@@ -49,21 +52,17 @@ def main():
     st.title("🐱🐶 Cat and Dog Classifier")
     st.write("Upload an image to classify it as a **cat** or a **dog**.")
 
-    # Ensure model is available
     download_model()
     model = load_model()
 
-    # File uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
     if uploaded_file is not None:
-        image = Image.open(uploaded_file).convert("RGB")  # Ensure 3 channels
+        image = Image.open(uploaded_file).convert("RGB")
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
         if st.button("Classify"):
             img_array = preprocess_image(image)
             prediction = model.predict(img_array)[0][0]
-
             if prediction > 0.5:
                 st.success("Prediction: 🐶 **Dog**")
             else:
