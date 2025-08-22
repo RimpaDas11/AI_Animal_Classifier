@@ -1,78 +1,76 @@
-import streamlit as st
-import numpy as np
-from keras.src.saving import load_model
-from PIL import Image
-import gdown
 import os
+import gdown
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import streamlit as st
+from PIL import Image
 
 # -----------------------------
 # CONFIG
 # -----------------------------
-MODEL_PATH = "cat_dog_classifier1.keras"
-FILE_ID = "1KIucvTlFOZCDuknnRSXGzx2cDpDp1Nz-"  # Your new .keras model
-URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
+MODEL_PATH = "cat_dog_classifier1.h5"
+# ✅ Use direct download link (converted from your Drive share link)
+DRIVE_URL = "https://drive.google.com/uc?id=1Vn5zGrlIKIC7E9PB2OWsk9HphXh8tFa4"
 
 # -----------------------------
-# CLEAN UP OLD/INVALID FILES
+# DOWNLOAD MODEL IF NEEDED
 # -----------------------------
-if os.path.exists("cat_dog_classifier1.h5"):
-    os.remove("cat_dog_classifier1.h5")  # delete old .h5 file
-if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) < 100000:  # <100 KB likely broken
-    os.remove(MODEL_PATH)
-
-# -----------------------------
-# DOWNLOAD MODEL IF NOT EXISTS
-# -----------------------------
-if not os.path.exists(MODEL_PATH):
-    with st.spinner("Downloading model... please wait ⏳"):
-        gdown.download(URL, MODEL_PATH, quiet=False)
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Model not found locally. Downloading..."):
+            try:
+                gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
+                st.success("✅ Model downloaded successfully!")
+            except Exception as e:
+                st.error(f"❌ Failed to download model: {e}")
+                st.stop()
 
 # -----------------------------
 # LOAD MODEL
 # -----------------------------
-@st.cache_resource
+@st.cache_resource  # Cache the model to avoid reloading
 def load_model():
-    try:
-        
-        model = load_model(MODEL_PATH, compile=False)
-        return model
-    except Exception as e:
-        st.error(f"❌ Failed to load model. Make sure the file is a valid .keras model. Error: {e}")
-        return None
-
-model = load_model()
+    return keras.models.load_model(MODEL_PATH)
 
 # -----------------------------
 # IMAGE PREPROCESSING
 # -----------------------------
 def preprocess_image(image):
-    img = image.resize((150, 150))  # Match your training input size
-    img_array = keras.utils.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array / 255.0  # normalize
-    return img_array
+    image = image.resize((150, 150))  # Resize to match training input
+    image = np.array(image) / 255.0   # Normalize pixel values
+    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    return image
 
 # -----------------------------
 # STREAMLIT APP
 # -----------------------------
-st.title("🐱🐶 Cat and Dog Classifier")
-st.write("Upload an image to classify it as a cat or a dog.")
+def main():
+    st.title("🐱🐶 Cat and Dog Classifier")
+    st.write("Upload an image to classify it as a **cat** or a **dog**.")
 
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    # Ensure model is available
+    download_model()
+    model = load_model()
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    # File uploader
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    if st.button("Classify"):
-        if model is not None:
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file).convert("RGB")  # Ensure 3 channels
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+
+        if st.button("Classify"):
             img_array = preprocess_image(image)
-            prediction = model.predict(img_array)
+            prediction = model.predict(img_array)[0][0]
 
-            # Binary classifier (Cat=0, Dog=1)
-            if prediction[0][0] > 0.5:
-                st.success("🐶 This looks like a **Dog**!")
+            if prediction > 0.5:
+                st.success("Prediction: 🐶 **Dog**")
             else:
-                st.success("🐱 This looks like a **Cat**!")
-        else:
-            st.error("Model not loaded. Please check the .keras file.")
+                st.success("Prediction: 🐱 **Cat**")
+
+# -----------------------------
+# ENTRY POINT
+# -----------------------------
+if __name__ == "__main__":
+    main()
