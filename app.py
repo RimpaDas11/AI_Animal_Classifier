@@ -3,9 +3,10 @@ import gdown
 import numpy as np
 import streamlit as st
 from PIL import Image
-from keras.models import load_model
-from keras.utils.generic_utils import get_custom_objects
+from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import get_custom_objects
 import tensorflow as tf
+
 
 # ---------------------------
 # Paths and URLs
