@@ -4,7 +4,7 @@
 This is a simple web application built using **Streamlit** that classifies uploaded images as either a **cat** or a **dog**, powered by a pre-trained deep learning model (Keras/TensorFlow).
 
 
----
+
 
 ## 🚀 Features
 
@@ -13,7 +13,7 @@ This is a simple web application built using **Streamlit** that classifies uploa
 - Uses a pre-trained `.h5` model hosted on **Google Drive**
 - Automatically downloads the model if not found locally
 
----
+
 
 ## 🧠 Model Info
 
@@ -21,7 +21,7 @@ This is a simple web application built using **Streamlit** that classifies uploa
 - Model is a binary classifier (output > 0.5 = Dog, else Cat)
 - Not stored in the GitHub repo (downloaded on-demand using `gdown`)
 
----
+
 
 ## 🔧 How to Run Locally
 
