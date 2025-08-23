@@ -7,12 +7,11 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import get_custom_objects
 import tensorflow as tf
 
-
 # ---------------------------
 # Paths and URLs
 # ---------------------------
-MODEL_PATH = "cat_dog_classifier1.h5"
-DRIVE_URL = "https://drive.google.com/uc?id=1IPtus1oq835st3RJmZbhqkujbXJz3Sot"
+MODEL_PATH = "cat_dog_classifier_fixed.h5"
+DRIVE_URL = "https://drive.google.com/uc?id=1IPtus1oq835st3RJmZbhqkujbXJz3Sot"  # update if needed
 
 # ---------------------------
 # Optional: Register custom layers/activations
@@ -42,13 +41,9 @@ def load_model_safe(model_path=MODEL_PATH):
         model = load_model(model_path, compile=False, safe_mode=False)
         st.success("Model loaded successfully!")
         return model
-    except TypeError as e:
-        st.error(f"TypeError while loading model: {e}")
-    except OSError as e:
-        st.error(f"OSError: Model file not found or corrupted. {e}")
     except Exception as e:
-        st.error(f"Unexpected error: {e}")
-    return None
+        st.error(f"Failed to load model: {e}")
+        st.stop()
 
 # ---------------------------
 # Preprocess uploaded image
