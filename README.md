@@ -1,6 +1,8 @@
-# 🐶🐱 Cat & Dog Image Classifier (AI)
+
+# 🐾 AI Animal Classifier (Cat vs Dog) — Streamlit App
 
 This is a simple web application built using **Streamlit** that classifies uploaded images as either a **cat** or a **dog**, powered by a pre-trained deep learning model (Keras/TensorFlow).
+
 
 ---
 
@@ -24,17 +26,45 @@ This is a simple web application built using **Streamlit** that classifies uploa
 ## 🔧 How to Run Locally
 
 1. **Clone the repo**:
+```bash
+git clone https://github.com/RimpaDas11/AI_Animal_Classifier.git
+cd AI_Animal_Classifier
+```
 
-   ```bash
-   git clone https://github.com/RimpaDas11/AI_Animal_Classifier.git
-   cd AI_Animal_Classifier
-2.Install dependencies:
+2. **Install dependencies**:
+```bash
 pip install -r requirements.txt
-3.Run the Streamlit app:
-streamlit run app.py
-📁Model Download
-The .h5 model file will be downloaded automatically from Google Drive when the app runs, using gdown.
-🧑‍💻 Author
+```
 
-Rimpa Das
-GitHub: @RimpaDas11
+3. **Run the Streamlit app**:
+```bash
+streamlit run app.py
+```
+
+
+
+## 📦 Model Download
+
+- The `.h5` model file (`cat_dog_classifier1.h5`) is automatically downloaded from Google Drive the first time the app runs, using `gdown`.
+- If you prefer to download it manually, use this link:
+
+🔗 **Model Download**:  
+https://drive.google.com/file/d/1IPtus1oq835st3RJmZbhqkujbXJz3Sot/view?usp=sharing
+
+After downloading, place the file in the project root directory.
+
+
+
+
+
+## 👩‍💻 Author
+
+**Rimpa Das**  
+GitHub: [@RimpaDas11](https://github.com/RimpaDas11)
+
+
+
+## 📌 Notes
+
+- Works with `.jpg`, `.jpeg`, and `.png` images
+- Requires Python 3.7+
