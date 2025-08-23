@@ -54,6 +54,12 @@ https://drive.google.com/file/d/1IPtus1oq835st3RJmZbhqkujbXJz3Sot/view?usp=shari
 After downloading, place the file in the project root directory.
 
 
+## Demo
+
+Here is a demo of how the project works. Click the link to watch it:
+
+[Watch Demo Video](https://drive.google.com/file/d/1drxFiM_u8bGF3qx7FqeAMl-_SIyb6LSE/view?usp=sharing)
+
 
 
 
