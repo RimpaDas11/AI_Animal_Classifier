@@ -2,9 +2,9 @@
 
 <div align="center">
 
-### Deep Learning-Based Cat vs Dog Image Classification System
+### Deep Learning-Based Cat vs Dog Image Classification
 
-Upload an image and let Artificial Intelligence determine whether it contains a Cat 🐱 or a Dog 🐶.
+Upload an image and instantly identify whether it contains a **Cat 🐱** or a **Dog 🐶** using Artificial Intelligence.
 
 ---
 
@@ -14,88 +14,43 @@ Upload an image and let Artificial Intelligence determine whether it contains a 
 
 ---
 
-# 🚀 Overview
+## 🌟 Overview
 
-AI Animal Classifier is a Deep Learning-powered web application that identifies whether an uploaded image contains a cat or a dog.
+AI Animal Classifier is a Deep Learning-powered web application that classifies images as either a Cat or a Dog using a trained Convolutional Neural Network (CNN).
 
-The application utilizes a trained Convolutional Neural Network (CNN) model developed using TensorFlow and Keras. Users can upload an image through an intuitive Streamlit interface and instantly receive a prediction.
+Built with TensorFlow, Keras, and Streamlit, the application provides a simple and interactive interface where users can upload images and receive real-time predictions.
 
-The project demonstrates practical implementation of Computer Vision, Deep Learning, Model Deployment, and Interactive Web Applications.
-
----
-
-# 🌟 Project Highlights
-
-✅ Deep Learning Image Classification
-
-✅ Cat vs Dog Recognition
-
-✅ Streamlit Web Interface
-
-✅ TensorFlow & Keras Integration
-
-✅ Automated Model Download
-
-✅ User-Friendly Design
-
-✅ Real-Time Prediction
+This project demonstrates the practical implementation of Computer Vision, Image Classification, Deep Learning, and Model Deployment through a user-friendly web application.
 
 ---
 
-# 🎯 Problem Statement
+## 🚀 Key Features
 
-Image classification is one of the most important applications of Artificial Intelligence.
+* 🐱 Cat vs Dog Image Classification
+* 🧠 Deep Learning-Based Prediction
+* 📤 Image Upload Support
+* ⚡ Real-Time Results
+* ☁️ Automatic Model Download
+* 🎨 Interactive Streamlit Interface
+* 📦 Lightweight Repository Structure
+* 📱 Easy to Run and Deploy
 
-This project aims to automatically classify animal images into two categories:
+---
+
+## 🎯 Problem Statement
+
+Image classification is one of the most common applications of Artificial Intelligence and Computer Vision.
+
+The objective of this project is to build a model capable of automatically identifying whether an uploaded image belongs to:
 
 * 🐱 Cat
 * 🐶 Dog
 
 using a trained Deep Learning model.
 
-The goal is to demonstrate how machine learning models can be deployed as interactive web applications for real-world use.
-
 ---
 
-# ✨ Features
-
-## 🖼️ Image Upload
-
-Supports:
-
-* JPG
-* JPEG
-* PNG
-
-file formats.
-
----
-
-## 🧠 Deep Learning Prediction
-
-Uses a trained CNN model to analyze image content.
-
----
-
-## ⚡ Instant Results
-
-Generates predictions within seconds.
-
----
-
-## ☁️ Automatic Model Loading
-
-The application automatically downloads the trained model when required.
-
----
-
-## 🎨 Interactive User Interface
-
-Built using Streamlit for a smooth user experience.
-
----
-
-# 🏗️ System Architecture
+## 🏗️ System Architecture
 
 ```text
 User Uploads Image
@@ -106,7 +61,7 @@ Image Preprocessing
           │
           ▼
 CNN Model
-(TensorFlow/Keras)
+(TensorFlow / Keras)
           │
           ▼
 Prediction Engine
@@ -120,58 +75,53 @@ Cat 🐱 or Dog 🐶
 
 ---
 
-# 🧠 How It Works
+## 🧠 How It Works
 
-### Step 1 — Upload Image
+### Step 1: Upload Image
 
 The user uploads an image through the Streamlit interface.
 
-### Step 2 — Image Processing
+### Step 2: Image Processing
 
-The image is:
+The uploaded image is:
 
 * Resized
 * Normalized
-* Converted into model-compatible format
+* Converted into a model-compatible format
 
----
+### Step 3: Deep Learning Inference
 
-### Step 3 — Model Inference
+The trained CNN model processes the image and generates a prediction score.
 
-The trained CNN model processes the image and predicts the probability score.
-
----
-
-### Step 4 — Classification
+### Step 4: Classification
 
 ```text
-Probability > 0.5  → Dog 🐶
-Probability ≤ 0.5 → Cat 🐱
+Prediction > 0.5  → Dog 🐶
+Prediction ≤ 0.5 → Cat 🐱
 ```
 
----
+### Step 5: Display Result
 
-### Step 5 — Result Display
-
-The final prediction is displayed on the screen.
+The final prediction is displayed instantly on the screen.
 
 ---
 
-# 🛠️ Technology Stack
+## 🛠️ Technology Stack
 
-| Category                 | Technology           |
-| ------------------------ | -------------------- |
-| Programming Language     | Python               |
-| Deep Learning            | TensorFlow           |
-| Neural Network Framework | Keras                |
-| Web Framework            | Streamlit            |
-| Image Processing         | PIL                  |
-| Numerical Computing      | NumPy                |
-| Model Distribution       | Google Drive + gdown |
+| Category                 | Technology   |
+| ------------------------ | ------------ |
+| Programming Language     | Python       |
+| Deep Learning            | TensorFlow   |
+| Neural Network Framework | Keras        |
+| Web Application          | Streamlit    |
+| Image Processing         | PIL          |
+| Numerical Computing      | NumPy        |
+| Model Download           | gdown        |
+| Version Control          | Git & GitHub |
 
 ---
 
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```text
 AI_Animal_Classifier/
@@ -190,42 +140,36 @@ AI_Animal_Classifier/
 
 ---
 
-# ⚙️ Installation
+## ⚙️ Installation
 
-## Clone Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/RimpaDas11/AI_Animal_Classifier.git
 cd AI_Animal_Classifier
 ```
 
----
-
-## Create Virtual Environment
+### Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
----
+### Activate Environment
 
-## Activate Virtual Environment
-
-### Windows
+**Windows**
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Linux / macOS
+**Linux / macOS**
 
 ```bash
 source venv/bin/activate
 ```
 
----
-
-## Install Dependencies
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -233,9 +177,9 @@ pip install -r requirements.txt
 
 ---
 
-# ▶️ Running the Application
+## ▶️ Run the Application
 
-Launch the Streamlit application:
+Launch the Streamlit app:
 
 ```bash
 streamlit run app.py
@@ -245,86 +189,75 @@ The application will automatically open in your browser.
 
 ---
 
-# 📦 Model Management
+## 📦 Model Management
 
-The trained model is not stored directly in the repository.
+The trained model is hosted externally and automatically downloaded when the application starts.
 
-When the application starts:
+### Advantages
 
-1. Checks for the model file.
-2. Downloads the model from Google Drive if necessary.
-3. Loads the model automatically.
-
-This approach keeps the repository lightweight and deployment-friendly.
-
----
-
-# 📊 Model Information
-
-### Model Type
-
-Convolutional Neural Network (CNN)
-
-### Classification Task
-
-Binary Image Classification
-
-### Classes
-
-* Cat
-* Dog
-
-### Framework
-
-TensorFlow / Keras
-
-### Output
-
-Probability-Based Prediction
+* Smaller repository size
+* Faster cloning
+* Easy deployment
+* Better version management
 
 ---
 
-# 📸 Demo
+## 📊 Model Information
 
-Include screenshots of:
+| Property            | Details                            |
+| ------------------- | ---------------------------------- |
+| Model Type          | Convolutional Neural Network (CNN) |
+| Classification Task | Binary Image Classification        |
+| Classes             | Cat & Dog                          |
+| Framework           | TensorFlow / Keras                 |
+| Output              | Probability Score                  |
+
+---
+
+## 📸 Screenshots
+
+Add screenshots here:
 
 * Home Page
 * Image Upload Screen
-* Prediction Result
-* Cat Classification
-* Dog Classification
+* Cat Prediction Example
+* Dog Prediction Example
+* Prediction Result Screen
 
-Adding screenshots significantly improves GitHub presentation.
-
----
-
-# 💡 Applications
-
-### 🐾 Pet Identification
-
-Automatic classification of pet images.
-
-### 🎓 Educational Learning
-
-Demonstrates Deep Learning and Computer Vision concepts.
-
-### 🤖 AI-Powered Applications
-
-Can serve as a foundation for advanced image recognition systems.
-
-### 📱 Smart Mobile Applications
-
-Can be integrated into mobile and web platforms.
+> Including screenshots improves repository presentation significantly.
 
 ---
 
-# 📈 Skills Demonstrated
+## 💡 Applications
 
-This project showcases:
+### 🐾 Pet Recognition
+
+Automatically classify pet images.
+
+### 🎓 Educational Projects
+
+Learn Computer Vision and Deep Learning concepts.
+
+### 🤖 AI Applications
+
+Serve as a foundation for advanced image classification systems.
+
+### 📱 Smart Applications
+
+Integrate into web and mobile platforms.
+
+### 🔬 Research & Experimentation
+
+Explore CNN architectures and image recognition workflows.
+
+---
+
+## 📈 Skills Demonstrated
 
 * Deep Learning
 * Computer Vision
-* Convolutional Neural Networks
+* Image Classification
+* Convolutional Neural Networks (CNN)
 * TensorFlow
 * Keras
 * Streamlit
@@ -333,72 +266,66 @@ This project showcases:
 
 ---
 
-# 🔮 Future Enhancements
+## 🔮 Future Enhancements
 
-### 🐾 Multi-Class Animal Detection
-
-Support additional animal species.
-
-### 📊 Confidence Scores
-
-Display prediction probabilities.
-
-### 📷 Webcam Support
-
-Real-time image classification.
-
-### ☁️ Cloud Deployment
-
-Deploy using:
-
-* Streamlit Cloud
-* Render
-* Railway
-
-### 📱 Mobile Optimization
-
-Improve accessibility across devices.
+* 🐾 Multi-Class Animal Classification
+* 📊 Confidence Score Visualization
+* 📷 Webcam-Based Classification
+* ☁️ Cloud Deployment
+* 📱 Mobile-Friendly Interface
+* 🧠 Improved Model Accuracy
+* 🌐 API Integration
 
 ---
 
-# ⚠️ Disclaimer
+## 🎓 Learning Outcomes
 
-This project is intended for educational and learning purposes.
+This project helps understand:
 
-Prediction accuracy depends on image quality, lighting conditions, and model performance.
-
-Results should not be considered guaranteed classifications.
+* Computer Vision Fundamentals
+* Deep Learning Workflows
+* CNN Architecture
+* Model Deployment
+* Streamlit Application Development
+* Image Processing Techniques
 
 ---
 
-# 👩‍💻 Developer
+## ⚠️ Disclaimer
 
-## Rimpa Das
+This project is developed for educational and learning purposes.
+
+Prediction accuracy depends on image quality, lighting conditions, and model performance. Results may not always be 100% accurate.
+
+---
+
+## 👩‍💻 Developer
+
+### Rimpa Das
 
 B.Tech Computer Science & Engineering
 Brainware University
 
-Passionate about Artificial Intelligence, Machine Learning, Computer Vision, and Full-Stack Development.
+Passionate about Artificial Intelligence, Machine Learning, Computer Vision, and developing intelligent software solutions.
 
-### Skills Demonstrated
+### Technical Skills Demonstrated
 
+* Python
+* TensorFlow
+* Keras
 * Deep Learning
-* Machine Learning
-* TensorFlow & Keras
-* Python Programming
 * Computer Vision
-* Streamlit Development
-
-### Related Projects
-
-* AI-Based Animal Classifier
-* Air Drawing using Hand Gesture Recognition
-* Silent Communication – Gesture Read Using AI
-* Creative Showcase
+* Streamlit
+* Image Classification
+* Model Deployment
 
 ---
 
-# ⭐ Support
+*"Building intelligent applications that make Artificial Intelligence accessible and impactful."*
+
+---
+
+## ⭐ Support
 
 If you found this project useful:
 
@@ -412,7 +339,7 @@ If you found this project useful:
 
 <div align="center">
 
-# 🐾 AI Animal Classifier
+## 🐾 AI Animal Classifier
 
 ### Teaching Machines to Recognize Cats and Dogs
 
